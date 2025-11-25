@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Register</title>
+</head>
+<body>
+    <div class="box">
+        <h2>Create Account</h2>
+        <form method="POST">
+            <label for="email">CSN email:</label>
+            <input type="email" name="email" placeholder="CSN Email">
+            <label for="password">NSHE</label>
+            <input type="text" name="nshe" placeholder="NSHE #">
+            <button>Register</button>
+        </form>
+        <a href="/login">Login</a>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+
+  <style>
+    body {
+      background-color: darkblue;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background-color: grey;
+      padding: 60px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: black;
+      text-align: left;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin-top: 15px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Create Account</h2>
+    <form method="POST" action="{{ url_for('register') }}">
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" placeholder="Enter Email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" placeholder="Enter Password" required>
+
+      <button type="submit">Register</button>
+    </form>
+    <a href="{{ url_for('login') }}">Already have an account? Login</a>
+  </div>
+
+</body>
+</html> -->

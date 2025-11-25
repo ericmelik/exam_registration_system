@@ -1,0 +1,174 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <div class="box">
+        <h2>Student Login</h2>
+        <form method="POST">
+            <label for="email">CSN email:</label>
+            <input type="email" name="email" placeholder="CSN Email" required>
+            <label for="password">NSHE</label>
+            <input type="password" name="nshe" placeholder="NSHE #" required>
+            <button type="submit" value="login">Login</button>
+        </form>
+        <a href="/register">Create Test Account</a>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="box">
+        <h2>Student Login</h2>
+        <form method="POST">
+            <input type="email" name="email" placeholder="CSN Email" required>
+            <input type="password" name="nshe" placeholder="NSHE #" required>
+            <button>Login</button>
+        </form>
+        <a href="/register">Create Test Account</a>
+    </div>
+</body>
+</html> -->
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login or Create Account</title>
+
+  <style>
+    body {
+      background-color: darkblue;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background-color: grey;
+      padding: 60px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: black;
+      text-align: left;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin-top: 15px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    -- LOGIN FORM --
+    <div id="loginForm">
+      <h2>Login</h2>
+      <form method="POST" action="{{ url_for('login') }}">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="loginEmail" placeholder="Enter Email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="loginPassword" placeholder="Enter Password" required>
+
+        <button type="submit">Login</button>
+      </form>
+      <a href="#" onclick="toggleForms()">Create an account</a>
+    </div>
+
+    -- REGISTER FORM --
+    <div id="registerForm" class="hidden">
+      <h2>Create Account</h2>
+      <form method="POST" action="{{ url_for('register') }}">
+        <label for="regEmail">Email:</label>
+        <input type="email" name="email" id="regEmail" placeholder="Enter Email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="regPassword" placeholder="Enter Password" required>
+
+        <button type="submit">Create Account</button>
+      </form>
+      <a href="#" onclick="toggleForms()">Already have an account? Login</a>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleForms() {
+      document.getElementById("loginForm").classList.toggle("hidden");
+      document.getElementById("registerForm").classList.toggle("hidden");
+    }
+  </script>
+
+</body>
+</html> -->

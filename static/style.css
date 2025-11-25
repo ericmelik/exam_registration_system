@@ -1,0 +1,116 @@
+body {
+      background-color: darkblue;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .box {
+      background-color: grey;
+      padding: 60px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 320px;
+      text-align: center;
+    }
+
+    .box h2 {
+      color: black;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: black;
+      text-align: left;
+    }
+
+    input, select {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      margin-top: 15px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a.danger { 
+      color: red; 
+    }
+
+    .hidden {
+      display: none;
+    }
+
+
+
+
+
+/* body {
+    font-family: Arial;
+    background: #f5f5f5;
+}
+
+.box {
+    width: 350px;
+    margin: 70px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #bbb;
+}
+
+.box h2 { text-align: center; }
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #0066cc;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+a {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+}
+
+a.danger { color: red; } */
