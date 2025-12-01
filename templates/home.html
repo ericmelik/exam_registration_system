@@ -1,4 +1,117 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Home - CSN Exam Registration{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px 0;">
+    <h2 style="color: #333; margin-bottom: 15px;">Welcome to CSN Exam Registration System</h2>
+    <p style="color: #666; font-size: 18px; margin-bottom: 40px;">
+        Hello, {{ first_name }}! 
+        {% if role == 'student' %}
+            Register for placement exams quickly and easily.
+        {% else %}
+            Manage your exam sessions and view registrations.
+        {% endif %}
+    </p>
+
+    {% if role == 'student' %}
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 40px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 15px;">Register for Exams</h3>
+            <p style="margin-bottom: 25px; opacity: 0.9;">Browse available exam sessions and register</p>
+            <a href="{{ url_for('exam_menu') }}" class="btn" style="background: white; color: #667eea;">
+                View Available Exams
+            </a>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 15px;">My Registrations</h3>
+            <p style="margin-bottom: 25px; opacity: 0.9;">View and manage your exam bookings</p>
+            <a href="{{ url_for('history') }}" class="btn" style="background: white; color: #f5576c;">
+                View My Registrations
+            </a>
+        </div>
+    </div>
+
+    <div style="margin-top: 60px; padding: 30px; background: #f8f9fa; border-radius: 10px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: #333; margin-bottom: 20px;">Quick Guide</h3>
+        <div style="text-align: left; color: #666; line-height: 2;">
+            <p><strong>Step 1:</strong> Browse available exams from the "Register for Exams" page</p>
+            <p><strong>Step 2:</strong> Select the exam session that fits your schedule</p>
+            <p><strong>Step 3:</strong> Confirm your registration</p>
+            <p><strong>Step 4:</strong> View your registrations in "My Registrations"</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 25px; background: #fff3cd; border-left: 4px solid #ffc107; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h4 style="color: #333; margin-bottom: 15px;">Important Reminders</h4>
+        <ul style="text-align: left; color: #666; line-height: 1.8; margin-left: 20px;">
+            <li>Maximum of <strong>3 exam registrations</strong> per student</li>
+            <li>Cannot register for the same exam twice</li>
+            <li>Sessions have a capacity limit of 20 students</li>
+            <li>You can cancel registrations if your plans change</li>
+            <li>Arrive 15 minutes early on exam day</li>
+        </ul>
+    </div>
+    {% else %}
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 40px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 15px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 15px;">Create Exam</h3>
+            <p style="margin-bottom: 25px; opacity: 0.9;">Set up new exam sessions for students</p>
+            <a href="{{ url_for('create_exam') }}" class="btn" style="background: white; color: #667eea;">
+                Create New Exam
+            </a>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px; border-radius: 15px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 15px;">My Exams</h3>
+            <p style="margin-bottom: 25px; opacity: 0.9;">View and manage your exam sessions</p>
+            <a href="{{ url_for('faculty_dashboard') }}" class="btn" style="background: white; color: #f5576c;">
+                View Dashboard
+            </a>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 40px; border-radius: 15px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom: 15px;">Locations</h3>
+            <p style="margin-bottom: 25px; opacity: 0.9;">Manage exam room locations</p>
+            <a href="{{ url_for('manage_locations') }}" class="btn" style="background: white; color: #00f2fe;">
+                Manage Locations
+            </a>
+        </div>
+    </div>
+    
+    <div style="margin-top: 60px; padding: 30px; background: #f8f9fa; border-radius: 10px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: #333; margin-bottom: 20px;">Faculty Tools</h3>
+        <div style="text-align: left; color: #666; line-height: 2;">
+            <p><strong>✓</strong> Create and schedule exam sessions</p>
+            <p><strong>✓</strong> View real-time registration status</p>
+            <p><strong>✓</strong> Access complete student registration lists</p>
+            <p><strong>✓</strong> Monitor capacity and availability</p>
+            <p><strong>✓</strong> Manage exam room locations</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
@@ -6,8 +119,8 @@
 </head>
 <body>
 
-<h2 style="color: white;">Welcome, {{ email }}</h2>
-<div?>
+<h2 style="color: white;">Welcome, {{ first_name }}</h2>
+<div>
      <p><a href="{{ url_for('exam_menu') }}">Register for an Exam</a></p>
      <p><a href="{{ url_for('history') }}">View My Reservations</a></p>
      <p><a href="{{ url_for('logout') }}">Logout</a></p>
@@ -15,4 +128,4 @@
 </div>
 
 </body>
-</html>
+</html> -->

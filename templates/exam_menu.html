@@ -1,4 +1,102 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Register for Exam{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 20px; color: #333;">Available Exams</h2>
+
+<div style="padding: 15px; background: #e3f2fd; border-left: 4px solid #2196F3; margin-bottom: 30px;">
+    <strong>Registration Status:</strong> You have registered for {{ registration_count }} out of 3 allowed exams.
+    {% if at_max %}
+        <br><span style="color: #d32f2f;">⚠️ You've reached the maximum of 3 exam registrations. Cancel one to register for another.</span>
+    {% endif %}
+</div>
+
+{% if exams %}
+    <table>
+        <thead>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Faculty</th>
+                <th>Available Seats</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+            <tr>
+                <td><strong>{{ exam.exam_name }}</strong></td>
+                <td>{{ exam.exam_date }}</td>
+                <td>{{ exam.exam_time }}</td>
+                <td>
+                    Room {{ exam.room_number }}<br>
+                    Building {{ exam.building_number }}<br>
+                    {{ exam.campus_name }}
+                </td>
+                <td>{{ exam.faculty_name }}</td>
+                <td>
+                     <span id="seat-status">  <!-- HERE WERE CHANGES!!! -->
+                        {{ exam.available_seats }} / {{ exam.capacity }}
+                    </span>
+                </td>
+                <td>
+                    {% if exam.exam_id in registered_exam_ids %}
+                        <span style="color: #388e3c; font-weight: 600;">✓ Registered</span>
+                    {% elif at_max %}
+                        <button class="btn btn-secondary" disabled>Max Reached</button>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('register_exam', exam_id=exam.exam_id) }}" style="margin: 0;">
+                            <button type="submit" class="btn">Register</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div style="padding: 40px; text-align: center; color: #666;">
+        <p style="font-size: 18px;">No exams are currently available for registration.</p>
+        <p style="margin-top: 10px;">Please check back later or contact your faculty.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+</div>
+
+<div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107;">
+    <h4 style="margin-bottom: 10px; color: #333;">Registration Rules:</h4>
+    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+        <li>You can register for up to <strong>3 different exams</strong></li>
+        <li>You cannot register for the same exam twice</li>
+        <li>Each exam session has a maximum capacity of 20 students</li>
+        <li>You can cancel registrations from the "My Registrations" page</li>
+    </ul>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -14,11 +112,6 @@
       <div class="title-underline"></div>
 
       <form id="examForm" method="POST" action="#">
-        <!-- <div class="form-group">
-          <label for="search1">Search</label>
-          <input type="text" id="search1" placeholder="Search by name or ID...">
-        </div> -->
-
         <div class="grid-two-col">
           <div class="form-group">
             <label for="time">Time</label>
@@ -37,10 +130,6 @@
             <option value="">Select exam type...</option>
             <option value="physical">In Person</option>
             <option value="blood">Online</option>
-            <!-- <option value="xray">X-Ray</option>
-            <option value="mri">MRI Scan</option>
-            <option value="ct">CT Scan</option>
-            <option value="ultrasound">Ultrasound</option> -->
           </select>
         </div>
 
@@ -68,12 +157,6 @@
             <option value="">Select subject...</option>
             <option value="cardiology">CIT260</option>
             <option value="neurology">CS202</option>
-            <!-- <option value="orthopedics">Orthopedics</option>
-            <option value="radiology">Radiology</option>
-            <option value="pediatrics">Pediatrics</option>
-            <option value="general">General Medicine</option>
-            <option value="dermatology">Dermatology</option>
-            <option value="ophthalmology">Ophthalmology</option> -->
           </select>
         </div>
 
@@ -101,7 +184,6 @@
     </div>
   </div>
   
-   <!-- Return Button  -->
   <div style="margin-bottom: 20px;">
       <a href="{{ url_for('home') }}" class="return-home-btn" style="
         display: inline-block;
@@ -118,51 +200,4 @@
     
   <script src="{{ url_for('static', filename='exam_menu.js') }}"></script>
 </body>
-</html>
-
-
-
-
-
-
-{#<!-- <!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="/static/style.css"></head>
-<body>
-    <div class="box">
-        <h2>Select Exam</h2>
-
-        <form method="GET">
-            <select name="exam_id" onchange="this.form.submit()">
-                <option disabled selected>Choose Exam</option>
-                {% for exam in exams %}
-                <option value="{{ exam.id }}"
-                        {% if exam.id|string == selected_exam_id %}selected{% endif %}>
-                    {{ exam.exam_name }}
-                </option>
-                {% endfor %}
-            </select>
-        </form>
-
-        {% if sessions %}
-        <h3>Select Session</h3>
-        <form method="POST" action="/book">
-            <input type="hidden" name="exam_id" value="{{ selected_exam_id }}">
-            <select name="session_id">
-                {% for s in sessions %}
-                <option value="{{ s.id }}">
-                    {{ s.session_date }} {{ s.session_time }}
-                    ({{ s.capacity - s.seats_taken }} seats left)
-                </option>
-                {% endfor %}
-            </select>
-            <button>Book Exam</button>
-        </form>
-        {% endif %}
-    </div>
-</body>
 </html> -->
-#}
-
-
-

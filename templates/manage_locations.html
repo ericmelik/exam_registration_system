@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Locations{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px; color: #333;">Manage Exam Locations</h2>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+    <!-- Add Location Form -->
+    <div>
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 10px;">
+            <h3 style="color: #333; margin-bottom: 20px;">Add New Location</h3>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="add">
+                
+                <label for="room_number">Room Number *</label>
+                <input type="text" 
+                       id="room_number" 
+                       name="room_number" 
+                       placeholder="e.g., 101, Lab A" 
+                       required>
+                
+                <label for="building_number">Building Number/Name *</label>
+                <input type="text" 
+                       id="building_number" 
+                       name="building_number" 
+                       placeholder="e.g., A, Science Building" 
+                       required>
+                
+                <label for="campus_name">Campus Name *</label>
+                <select id="campus_name" 
+                        name="campus_name" 
+                        required
+                        style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                    <option value="">-- Select Campus --</option>
+                    <option value="Charleston Campus">Charleston Campus</option>
+                    <option value="North Las Vegas Campus">North Las Vegas Campus</option>
+                    <option value="Henderson Campus">Henderson Campus</option>
+                    <option value="Online">Online</option>
+                </select>
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    Or type a custom campus name
+                </small>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">
+                    Add Location
+                </button>
+            </form>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 20px; background: #e3f2fd; border-left: 4px solid #2196F3; border-radius: 5px;">
+            <h4 style="margin-bottom: 10px; color: #333;">Tips:</h4>
+            <ul style="margin-left: 20px; color: #666; line-height: 1.8; font-size: 14px;">
+                <li>Add all available exam rooms</li>
+                <li>Use consistent naming</li>
+                <li>Locations in use cannot be deleted</li>
+                <li>Faculty can select from these when creating exams</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Existing Locations List -->
+    <div>
+        <h3 style="color: #333; margin-bottom: 20px;">Existing Locations ({{ locations|length }})</h3>
+        
+        {% if locations %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Building</th>
+                        <th>Campus</th>
+                        <th>Exams Using</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for location in locations %}
+                    <tr>
+                        <td><strong>{{ location.room_number }}</strong></td>
+                        <td>{{ location.building_number }}</td>
+                        <td>{{ location.campus_name }}</td>
+                        <td>
+                            {% if location.exam_count > 0 %}
+                                <span style="color: #667eea; font-weight: 600;">{{ location.exam_count }}</span>
+                            {% else %}
+                                <span style="color: #999;">0</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if location.exam_count == 0 %}
+                                <form method="POST" 
+                                      onsubmit="return confirm('Delete this location?');"
+                                      style="margin: 0;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="location_id" value="{{ location.location_id }}">
+                                    <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 14px;">
+                                        Delete
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span style="color: #999; font-size: 14px;">In use</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                <strong>Total Locations:</strong> {{ locations|length }}
+            </div>
+        {% else %}
+            <div style="padding: 60px 20px; text-align: center; background: #f8f9fa; border-radius: 10px;">
+                <h3 style="color: #666; margin-bottom: 15px;">No Locations Added Yet</h3>
+                <p style="color: #999;">Use the form on the left to add your first exam location.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<script>
+// Allow custom campus name input
+document.getElementById('campus_name').addEventListener('change', function() {
+    if (this.value === 'custom') {
+        const customValue = prompt('Enter custom campus name:');
+        if (customValue) {
+            const option = document.createElement('option');
+            option.value = customValue;
+            option.text = customValue;
+            option.selected = true;
+            this.add(option);
+        }
+    }
+});
+
+// Make campus name field editable for custom input
+document.getElementById('campus_name').addEventListener('focus', function() {
+    this.setAttribute('list', 'campus_list');
+});
+</script>
+{% endblock %}

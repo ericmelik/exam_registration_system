@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Create Exam Session{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <h2 style="margin-bottom: 30px; color: #333;">Create New Exam Session</h2>
+    
+    <form method="POST">
+        <label for="exam_name">Exam Name *</label>
+        <input type="text" 
+               id="exam_name" 
+               name="exam_name" 
+               placeholder="e.g., Math Placement Exam" 
+               required>
+        
+        <label for="location_id">Location *</label>
+        <select id="location_id" 
+                name="location_id" 
+                required
+                style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+            <option value="">-- Select a Location --</option>
+            {% for location in locations %}
+            <option value="{{ location.location_id }}">
+                Room {{ location.room_number }}, Building {{ location.building_number }} - {{ location.campus_name }}
+            </option>
+            {% endfor %}
+        </select>
+        
+        <label for="exam_date">Exam Date *</label>
+        <input type="date" 
+               id="exam_date" 
+               name="exam_date" 
+               min="{{ today }}"
+               required
+               style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+        
+        <label for="exam_time">Exam Time *</label>
+        <input type="time" 
+               id="exam_time" 
+               name="exam_time" 
+               required
+               style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+        
+        <label for="capacity">Maximum Capacity *</label>
+        <input type="number" 
+               id="capacity" 
+               name="capacity" 
+               value="20" 
+               min="1" 
+               max="100"
+               required
+               style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+        <small style="color: #666; display: block; margin-top: 5px;">
+            Default is 20 students per session. Adjust based on room capacity.
+        </small>
+        
+        <div style="display: flex; gap: 15px; margin-top: 25px;">
+            <button type="submit" class="btn" style="flex: 1;">
+                Create Exam Session
+            </button>
+            <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-secondary" style="flex: 1; text-align: center;">
+                Cancel
+            </a>
+        </div>
+    </form>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107;">
+        <h4 style="margin-bottom: 10px; color: #333;">Tips for Creating Exams:</h4>
+        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+            <li>Schedule exams at least 1 week in advance</li>
+            <li>Consider student availability (avoid early mornings)</li>
+            <li>Ensure the room capacity matches your setting</li>
+            <li>Multiple sessions for the same exam can be created</li>
+        </ul>
+    </div>
+    
+    {% if not locations %}
+    <div style="margin-top: 30px; padding: 20px; background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24;">
+        <strong>⚠️ No Locations Available</strong><br>
+        Please contact the system administrator to add exam locations before creating exams.
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Set minimum date to today
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('exam_date').setAttribute('min', today);
+});
+</script>
+{% endblock %}

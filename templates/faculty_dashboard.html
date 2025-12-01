@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px; color: #333;">Faculty Dashboard</h2>
+
+<div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin-bottom: 30px;">
+    <h3 style="margin-bottom: 10px;">Welcome, {{ session.get('first_name') }} {{ session.get('last_name') }}</h3>
+    <p style="opacity: 0.9;">Manage your exam sessions and view student registrations</p>
+</div>
+
+<h3 style="color: #333; margin-bottom: 20px;">Your Exam Sessions</h3>
+
+<div style="margin-bottom: 20px;">
+    <a href="{{ url_for('create_exam') }}" class="btn">
+        + Create New Exam Session
+    </a>
+</div>
+
+{% if exams %}
+    <table>
+        <thead>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+            <tr>
+                <td><strong>{{ exam.exam_name }}</strong></td>
+                <td>{{ exam.exam_date }}</td>
+                <td>{{ exam.exam_time }}</td>
+                <td>
+                    Room {{ exam.room_number }}<br>
+                    Building {{ exam.building_number }}<br>
+                    {{ exam.campus_name }}
+                </td>
+                <td>
+                    <span style="color: #666;" id="seat-status">
+                        {{ exam.seats_filled }} / {{ exam.capacity }}
+                    </span>
+                </td>
+                <td>
+                    {% if exam.seats_filled >= exam.capacity %}
+                        <span style="color: #d32f2f; font-weight: 600;">FULL</span>
+                    {% elif exam.seats_filled > exam.capacity * 0.8 %}
+                        <span style="color: #ff9800; font-weight: 600;">FILLING UP</span>
+                    {% else %}
+                        <span style="color: #388e3c; font-weight: 600;">AVAILABLE</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{{ url_for('view_registrations', exam_id=exam.exam_id) }}" class="btn" style="padding: 8px 16px; font-size: 14px;">
+                            View Registrations
+                        </a>
+                        
+                        {% if exam.seats_filled == 0 %}
+                            <form method="POST" 
+                                  action="{{ url_for('delete_exam', exam_id=exam.exam_id) }}"
+                                  onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');"
+                                  style="margin: 0;">
+                                <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 14px;">
+                                    Delete
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-secondary" 
+                                    disabled 
+                                    title="Cannot delete exam with registered students"
+                                    style="padding: 8px 16px; font-size: 14px; cursor: not-allowed;">
+                                Delete
+                            </button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+        <h4 style="color: #333; margin-bottom: 15px;">Summary Statistics</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #667eea;">
+                <div style="color: #666; font-size: 14px;">Total Exams</div>
+                <div style="color: #333; font-size: 28px; font-weight: 600;">{{ exams|length }}</div>
+            </div>
+            <div style="padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #388e3c;">
+                <div style="color: #666; font-size: 14px;">Total Seats</div>
+                <div style="color: #333; font-size: 28px; font-weight: 600;">
+                    {% set total_capacity = namespace(value=0) %}
+                    {% for exam in exams %}
+                        {% set total_capacity.value = total_capacity.value + exam.capacity %}
+                    {% endfor %}
+                    {{ total_capacity.value }}
+                </div>
+            </div>
+            <div style="padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #f5576c;">
+                <div style="color: #666; font-size: 14px;">Total Registrations</div>
+                <div style="color: #333; font-size: 28px; font-weight: 600;">
+                    {% set total_filled = namespace(value=0) %}
+                    {% for exam in exams %}
+                        {% set total_filled.value = total_filled.value + exam.seats_filled %}
+                    {% endfor %}
+                    {{ total_filled.value }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div style="padding: 60px 20px; text-align: center; background: #f8f9fa; border-radius: 10px;">
+        <h3 style="color: #666; margin-bottom: 15px;">No Exam Sessions Found</h3>
+        <p style="color: #999;">You haven't created any exam sessions yet.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Registrations{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px; color: #333;">Exam Registration Details</h2>
+
+<div style="padding: 25px; background: #f8f9fa; border-radius: 10px; margin-bottom: 30px;">
+    <h3 style="color: #333; margin-bottom: 15px;">{{ exam.exam_name }}</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #666;">
+        <div>
+            <strong>Date:</strong> {{ exam.exam_date }}
+        </div>
+        <div>
+            <strong>Time:</strong> {{ exam.exam_time }}
+        </div>
+        <div>
+            <strong>Capacity:</strong> 
+            <span style="color: #666;" id="seat-status">
+                {{ exam.seats_filled }} / {{ exam.capacity }}
+            </span>
+        </div>
+        <div>
+            <strong>Available Seats:</strong> 
+            <span style="color: #388e3c; font-weight: 600;">
+                {{ exam.capacity - exam.seats_filled }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<h3 style="color: #333; margin-bottom: 20px;">Registered Students ({{ registrations|length }})</h3>
+
+{% if registrations %}
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in registrations %}
+            <tr>
+                <td><strong>{{ reg.student_id }}</strong></td>
+                <td>{{ reg.first_name }} {{ reg.last_name }}</td>
+                <td>{{ reg.email }}</td>
+                <td>{{ reg.registration_date.strftime('%Y-%m-%d %I:%M %p') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-left: 4px solid #2196F3;">
+        <strong>Export Options:</strong> You can copy this list or take a screenshot for your records.
+    </div>
+{% else %}
+    <div style="padding: 60px 20px; text-align: center; background: #f8f9fa; border-radius: 10px;">
+        <h3 style="color: #666; margin-bottom: 15px;">No Students Registered Yet</h3>
+        <p style="color: #999;">Students will appear here once they register for this exam session.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 30px; display: flex; gap: 15px;">
+    <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    
+    {% if registrations|length == 0 %}
+        <form method="POST" 
+              action="{{ url_for('delete_exam', exam_id=exam_id) }}"
+              onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');"
+              style="margin: 0;">
+            <button type="submit" class="btn btn-danger">
+                Delete This Exam
+            </button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

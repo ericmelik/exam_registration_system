@@ -1,4 +1,68 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Registration Confirmed{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; text-align: center; padding: 40px 0;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 40px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <div style="font-size: 80px; margin-bottom: 20px;">✓</div>
+        <h2 style="margin-bottom: 20px; font-size: 32px;">Registration Successful!</h2>
+        <p style="font-size: 18px; opacity: 0.9;">
+            Your exam registration has been confirmed.
+        </p>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 30px; background: #f8f9fa; border-radius: 10px; text-align: left;">
+        <h3 style="color: #333; margin-bottom: 20px;">What's Next?</h3>
+        <ul style="color: #666; line-height: 2; margin-left: 20px;">
+            <li>Check your CSN email for confirmation details</li>
+            <li>View your registration details in "My Registrations"</li>
+            <li>Arrive 15 minutes early on the exam day</li>
+            <li>Bring a valid photo ID</li>
+            <li>You can cancel your registration if plans change</li>
+        </ul>
+    </div>
+    
+    <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('history') }}" class="btn">
+            View My Registrations
+        </a>
+        <a href="{{ url_for('exam_menu') }}" class="btn btn-secondary">
+            Register for Another Exam
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">
+            Back to Home
+        </a>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107; text-align: left;">
+        <h4 style="color: #333; margin-bottom: 10px;">Important Reminders:</h4>
+        <p style="color: #666; line-height: 1.8;">
+            If you need to cancel or reschedule, please do so at least 24 hours before the exam time. 
+            Late cancellations may affect your ability to register for future exams.
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html>
 <head><link rel="stylesheet" href="/static/style.css"></head>
 <body>
@@ -7,7 +71,7 @@
         <a href="/">Back to Home page</a>
     </div>
 </body>
-</html>
+</html> -->
 
 
 
