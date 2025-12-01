@@ -3,7 +3,7 @@ from mysql.connector import connect
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_change_this_in_production'
+app.secret_key = 'your_secret_key'
 
 # Database connection
 def get_db():
