@@ -3,21 +3,26 @@ from flask_wtf.csrf import CSRFProtect
 from mysql.connector import connect
 from datetime import datetime
 import bcrypt
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Enable CSRF Protection
 csrf = CSRFProtect(app)
 
-# Database connection
+# Database connection using environment variables
 def get_db():
     return connect(
-        host="localhost",
-        port=3306,
-        user="root",
-        password="rootroot",
-        database="flask_db_2"
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
     )
 
 #---------- HELPER FUNCTIONS ----------
