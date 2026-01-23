@@ -1,0 +1,57 @@
+CREATE TABLE Student (
+    student_id VARCHAR(20) PRIMARY KEY,       -- NSHE number
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,       -- student NSHE email
+    password VARCHAR(100) NOT NULL            -- NSHE number or hashed
+);
+
+
+CREATE TABLE Faculty (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE Location (
+    location_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(20) NOT NULL,
+    building_number VARCHAR(20) NOT NULL,
+    campus_name VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE Exam (
+    exam_id INT AUTO_INCREMENT PRIMARY KEY,
+    exam_name VARCHAR(100) NOT NULL,
+    faculty_id INT NOT NULL,
+    location_id INT NOT NULL,
+    exam_date DATE NOT NULL,
+    exam_time TIME NOT NULL,
+    capacity INT NOT NULL DEFAULT 20,
+    seats_filled INT NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (faculty_id) REFERENCES Faculty(faculty_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (location_id) REFERENCES Location(location_id)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE ExamRegistration (
+    registration_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(20) NOT NULL,
+    exam_id INT NOT NULL,
+    registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (student_id) REFERENCES Student(student_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (exam_id) REFERENCES Exam(exam_id)
+        ON DELETE CASCADE,
+
+    -- No duplicate booking for same exam
+    UNIQUE (student_id, exam_id)
+);

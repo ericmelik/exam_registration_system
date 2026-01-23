@@ -7,6 +7,8 @@
     <h2 style="margin-bottom: 30px; color: #333;">Login to Your Account</h2>
     
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
         <label for="email">Email Address</label>
         <input type="email" 
                id="email" 
@@ -42,44 +44,3 @@
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <html>
-<head>
-    <link rel="stylesheet" href="/static/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <div class="box">
-        <h2>Student Login</h2>
-        <form method="POST">
-            <label for="email">Email</label>
-            <input type="email" name="email" placeholder="email" required>
-            
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="password" required>
-
-            <button type="submit" value="login">Login</button>
-        </form>
-        <a href="/register">Create Test Account</a>
-    </div>
-</body>
-</html> -->

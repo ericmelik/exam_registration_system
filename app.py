@@ -1,9 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask_wtf.csrf import CSRFProtect
 from mysql.connector import connect
 from datetime import datetime
+import bcrypt
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Enable CSRF Protection
+csrf = CSRFProtect(app)
 
 # Database connection
 def get_db():
@@ -16,6 +21,24 @@ def get_db():
     )
 
 #---------- HELPER FUNCTIONS ----------
+
+def hash_password(password):
+    """Hash a password using bcrypt"""
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+def verify_password(password, hashed):
+    """Verify a password against a bcrypt hash"""
+    # Convert password to bytes
+    password_bytes = password.encode('utf-8')
+    
+    # Convert hashed to bytes if it's a string
+    if isinstance(hashed, str):
+        hashed_bytes = hashed.encode('utf-8')
+    else:
+        hashed_bytes = hashed
+    
+    # Verify the password
+    return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 def get_student_reservation_count(student_id):
     """Get count of different exams student is registered for"""
@@ -88,6 +111,9 @@ def register():
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         
+        # Hash the password
+        hashed_password = hash_password(password)
+        
         db = get_db()
         cursor = db.cursor()
         
@@ -103,7 +129,7 @@ def register():
                 cursor.execute("""
                     INSERT INTO Student (student_id, email, password, first_name, last_name) 
                     VALUES (%s, %s, %s, %s, %s)
-                """, (student_id, email, password, first_name, last_name))
+                """, (student_id, email, hashed_password, first_name, last_name))
                 db.commit()
                 flash("Student registration successful! Please log in.", "success")
             
@@ -112,7 +138,7 @@ def register():
                 cursor.execute("""
                     INSERT INTO Faculty (email, password, first_name, last_name) 
                     VALUES (%s, %s, %s, %s)
-                """, (email, password, first_name, last_name))
+                """, (email, hashed_password, first_name, last_name))
                 db.commit()
                 flash("Faculty registration successful! Please log in.", "success")
             
@@ -144,11 +170,11 @@ def login():
         if '@student.csn.edu' in email:
             cursor.execute("""
                 SELECT * FROM Student 
-                WHERE email = %s AND password = %s
-            """, (email, password))
+                WHERE email = %s
+            """, (email,))
             user = cursor.fetchone()
             
-            if user:
+            if user and verify_password(password, user['password']):
                 session['student_id'] = user['student_id']
                 session['email'] = user['email']
                 session['first_name'] = user['first_name']
@@ -163,11 +189,11 @@ def login():
         else:
             cursor.execute("""
                 SELECT * FROM Faculty 
-                WHERE email = %s AND password = %s
-            """, (email, password))
+                WHERE email = %s
+            """, (email,))
             user = cursor.fetchone()
             
-            if user:
+            if user and verify_password(password, user['password']):
                 session['faculty_id'] = user['faculty_id']
                 session['email'] = user['email']
                 session['first_name'] = user['first_name']
@@ -629,138 +655,3 @@ def delete_exam(exam_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from flask import Flask, render_template, redirect, url_for, request, session, flash
-# from mysql.connector import connect
-# from datetime import datetime
-
-# app = Flask(__name__)
-
-# # Database connection
-# db = connect(
-#     host="localhost",
-#     port=3306,
-#     user="root",
-#     password="rootroot",
-#     database="flask_db_2"
-# )
-
-# # get cursor
-# cursor = db.cursor(dictionary=True)
-
-#         # cursor.execute('SELECT * FROM users')
-#         # users = cursor.fetchall()
-#         # print(users)
-
-
-# app.secret_key = 'your_secret_key'
-
-
-# #---------- ROUTES ----------
-
-# @app.route('/')
-# def home():
-#     user_email = session.get('email')
-#     first_name = session.get('first_name')  # ← Get from session
-    
-#     if not user_email:
-#         return redirect(url_for('login'))
-    
-#     return render_template('home.html', email=user_email, first_name=first_name) 
-
-
-# @app.route('/register', methods=['GET', 'POST'])
-# def register():
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         password = request.form['password']
-#         first_name = request.form['first_name']
-#         last_name = request.form['last_name']
-        
-#         # Generate or get student_id (NSHE number)
-#         # You'll need to add an input field for this in register.html
-#         student_id = request.form.get('student_id')  # Add this field to your form!
-
-#         cursor.execute(
-#             "INSERT INTO Student (student_id, email, password, first_name, last_name) VALUES (%s, %s, %s, %s, %s)", 
-#             (student_id, email, password, first_name, last_name)
-#         )
-#         db.commit()
-        
-#         flash("Registration successful! Please log in.", "success")
-#         return redirect(url_for('login'))
-
-#     return render_template('register.html')
-
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         password = request.form['password']
-
-#         cursor = db.cursor(dictionary=True)
-#         cursor.execute("SELECT * FROM Student WHERE email = %s AND password = %s", (email, password))
-#         Student = cursor.fetchone()
-#         cursor.close()
-
-#         if Student:
-#             session['email'] = Student['email']
-#             session['password'] = Student['password']
-#             session['first_name'] = Student['first_name']
-#             session['last_name'] = Student['last_name']
-
-#             flash("Login successful!", "success")  # Success flash message
-#             return redirect(url_for('home'))
-#         else:
-#             flash("Invalid email or NSHE number.", "error")  # Error flash message
-
-
-#     return render_template('login.html')
-
-
-# @app.route('/logout')
-# def logout():
-#     session.clear() 
-#     return redirect(url_for('home'))
-
-
-# @app.route('/exam_menu')
-# def exam_menu():
-#     print("Rendering exam_menu.html")
-#     return render_template('exam_menu.html')
-
-
-# @app.route('/confirmation')
-# def confirmation():
-#     return render_template('confirmation.html')
-
-
-# @app.route('/history')
-# def history():
-#     if 'email' not in session:
-#         return redirect(url_for('login'))
-#     return render_template('history.html')
-
-
-# if __name__ == '__main__':
-#      app.run(host = '0.0.0.0', port = 5001, debug=True)
-#      print("Server is running on http://localhost:5001") 
-

@@ -7,6 +7,8 @@
     <h2 style="margin-bottom: 30px; color: #333;">Create an Account</h2>
     
     <form method="POST" id="registerForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
         <label for="email">Email Address *</label>
         <input type="email" 
                id="email" 
@@ -112,51 +114,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 {% endblock %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Register</title>
-</head>
-<body>
-    <div class="box">
-        <h2>Create Account</h2>
-        <form method="POST">
-            <label for="student_id">NSHE #</label>
-            <input type="text" name="student_id" placeholder="NSHE number" required>
-
-            <label for="email">Email</label>
-            <input type="email" name="email" placeholder="email" required>
-            
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="password" required>
-
-            <label for="email">First name</label>
-            <input type="text" name="first_name" placeholder="first name" required>
-            
-            <label for="password">Last name</label>
-            <input type="text" name="last_name" placeholder="last name" required>
-
-            <button>Register</button>
-        </form>
-        <a href="/login">Login</a>
-    </div>
-</body>
-</html> -->

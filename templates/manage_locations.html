@@ -12,6 +12,8 @@
             <h3 style="color: #333; margin-bottom: 20px;">Add New Location</h3>
             
             <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <input type="hidden" name="action" value="add">
                 
                 <label for="room_number">Room Number *</label>
@@ -93,6 +95,8 @@
                                 <form method="POST" 
                                       onsubmit="return confirm('Delete this location?');"
                                       style="margin: 0;">
+                                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="location_id" value="{{ location.location_id }}">
                                     <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 14px;">
